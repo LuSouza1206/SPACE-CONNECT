@@ -1,0 +1,194 @@
+@model DashboardViewModel
+@{
+    ViewData["Title"] = "Painel";
+    var destaque = Model.Recentes.FirstOrDefault();
+    var maxSetor = Model.PorCategoria.Count > 0 ? Model.PorCategoria.Max(c => c.Quantidade) : 1;
+}
+
+<section class="sc-hero-editorial">
+    <div class="sc-hero-editorial-bg sc-hero-media">
+        <div class="sc-hero-fallback sc-hero-ken-burns is-active" style="@NasaUi.HeroStyle()"></div>
+    </div>
+    <div class="sc-hero-editorial-inner sc-hero-enter">
+        <p class="sc-hero-tagline">Nova Economia Espacial · FIAP 3ESPR</p>
+        <h1 class="sc-hero-title">
+            <span>Aprenda</span>
+            <span class="sc-hero-title-accent">explorando</span>
+            <span class="sc-hero-title-sub">o que saiu do espaço</span>
+        </h1>
+        <p class="sc-hero-deck">
+            Um arquivo sobre tecnologias nascidas em missões espaciais — e adotadas no cotidiano terrestre.
+        </p>
+        <a href="/Tecnologias" class="sc-explore-orb" aria-label="Explorar spinoffs">
+            <span class="sc-explore-orb-arrow">↓</span>
+            <span class="sc-explore-orb-text">Explorar<br />o arquivo</span>
+        </a>
+    </div>
+</section>
+
+<div class="sc-container">
+    <section class="sc-dash-panel reveal" aria-label="Métricas de impacto">
+        <header class="sc-editorial-head sc-dash-head">
+            <div>
+                <span class="sc-kicker">Painel de controle</span>
+                <h2>Impacto do arquivo</h2>
+            </div>
+        </header>
+        <div class="sc-dash-metrics">
+            <div class="sc-stat-card reveal">
+                <div class="sc-stat-value" data-count="@Model.TotalTecnologias">0</div>
+                <div class="sc-stat-label">Total de tecnologias</div>
+            </div>
+            <div class="sc-stat-card reveal">
+                <div class="sc-stat-value" data-count="@Model.TotalMissoes">0</div>
+                <div class="sc-stat-label">Missões mapeadas</div>
+            </div>
+            <div class="sc-stat-card reveal">
+                <div class="sc-stat-value" data-count="@Model.TotalSetoresBeneficiados">0</div>
+                <div class="sc-stat-label">Setores beneficiados</div>
+            </div>
+            <div class="sc-stat-card reveal">
+                <div class="sc-stat-value" data-count="@Model.TotalCategorias">0</div>
+                <div class="sc-stat-label">Setores catalogados</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="sc-dash-panel reveal" aria-label="Herança tecnológica por setor">
+        <header class="sc-editorial-head">
+            <div>
+                <span class="sc-kicker">Distribuição</span>
+                <h2>Herança espacial na Terra</h2>
+            </div>
+            <p class="sc-dash-sub">Setores que mais recebem spinoffs documentados no arquivo.</p>
+        </header>
+        <div class="sc-sector-block sc-progress-panel">
+            @foreach (var cat in Model.PorCategoria.Where(c => c.Quantidade > 0).OrderByDescending(c => c.Quantidade))
+            {
+                var pct = maxSetor > 0 ? (int)Math.Round(100.0 * cat.Quantidade / maxSetor) : 0;
+                <a href="/Tecnologias?categoriaId=@cat.Id" class="sc-progress-row">
+                    <div class="sc-progress-meta">
+                        <span class="sc-progress-name">@cat.Nome</span>
+                        <span class="sc-progress-count">@cat.Quantidade @(cat.Quantidade == 1 ? "spinoff" : "spinoffs")</span>
+                    </div>
+                    <div class="progress sc-progress" role="progressbar" aria-valuenow="@pct" aria-valuemin="0" aria-valuemax="100" aria-label="@cat.Nome: @cat.Quantidade spinoffs">
+                        <div class="progress-bar sc-progress-bar-fill" data-pct="@pct" style="width: 0%; background-color: @cat.CorHex;"></div>
+                    </div>
+                </a>
+            }
+        </div>
+    </section>
+
+    <p class="sc-intro-prose reveal">
+        Este arquivo reúne <strong>@Model.TotalTecnologias spinoffs</strong> documentados, nascidos em <strong>@Model.TotalMissoes missões</strong> e hoje espalhados por <strong>@Model.TotalSetoresBeneficiados setores</strong> — de assentos de aeronave a filtros de água.
+    </p>
+
+    @if (destaque != null)
+    {
+        <section class="sc-editorial-feature reveal">
+            <header class="sc-editorial-head">
+                <div>
+                    <span class="sc-kicker">Em destaque</span>
+                    <h2>Da órbita ao dia a dia</h2>
+                </div>
+                <div class="sc-editorial-nav" aria-hidden="true">
+                    <span class="sc-editorial-nav-btn">‹</span>
+                    <span class="sc-editorial-nav-btn">›</span>
+                </div>
+            </header>
+            <div class="sc-editorial-grid">
+                <a href="/Tecnologias/Detalhes/@destaque.Id" class="sc-editorial-lead">
+                    <div class="sc-editorial-lead-img">
+                        <img src="@NasaUi.SpinoffImage(destaque.Id, destaque.CategoriaNome)" alt="@destaque.Nome" loading="lazy" />
+                    </div>
+                    <div class="sc-editorial-lead-body">
+                        <time class="sc-editorial-date">@(destaque.AnoOrigem?.ToString() ?? destaque.CriadoEm.ToString("yyyy"))</time>
+                        <h3>@destaque.Nome</h3>
+                        <p class="sc-prose">@destaque.Descricao</p>
+                        @if (!string.IsNullOrEmpty(destaque.AplicacaoTerra))
+                        {
+                            <p class="sc-editorial-earth"><strong>Na Terra</strong> @destaque.AplicacaoTerra</p>
+                        }
+                        <span class="sc-read-more">Ler dossiê completo</span>
+                    </div>
+                </a>
+                <div class="sc-editorial-stack">
+                    @foreach (var t in Model.Recentes.Skip(1).Take(3))
+                    {
+                        <a href="/Tecnologias/Detalhes/@t.Id" class="sc-editorial-card">
+                            <div class="sc-editorial-card-img">
+                                <img src="@NasaUi.SpinoffImage(t.Id, t.CategoriaNome)" alt="" loading="lazy" />
+                            </div>
+                            <div class="sc-editorial-card-body">
+                                <span class="sc-editorial-cat">@t.CategoriaNome</span>
+                                <h4>@t.Nome</h4>
+                                <span class="sc-read-more">Ver dossiê</span>
+                            </div>
+                        </a>
+                    }
+                </div>
+            </div>
+        </section>
+    }
+
+    <section class="sc-editorial-sectors reveal">
+        <header class="sc-editorial-head">
+            <div>
+                <span class="sc-kicker">Mapa de impacto</span>
+                <h2>Setores beneficiados</h2>
+            </div>
+            <a href="/Tecnologias" class="sc-read-more">Ver catálogo →</a>
+        </header>
+        <div class="sc-sector-mosaic">
+            @foreach (var cat in Model.PorCategoria.Where(c => c.Quantidade > 0))
+            {
+                <a href="/Tecnologias?categoriaId=@cat.Id" class="sc-sector-tile sc-img-hover">
+                    <img src="@NasaUi.CategoryImage(cat.Nome)" alt="@cat.Nome" loading="lazy" />
+                    <span class="sc-sector-tile-count">@cat.Quantidade</span>
+                    <div class="sc-sector-tile-body">
+                        <strong>@cat.Nome</strong>
+                        <span>@(cat.Quantidade == 1 ? "1 spinoff" : $"{cat.Quantidade} spinoffs")</span>
+                    </div>
+                </a>
+            }
+        </div>
+    </section>
+
+    <section class="sc-dash-panel reveal">
+        <header class="sc-editorial-head">
+            <div>
+                <span class="sc-kicker">Arquivo</span>
+                <h2>Últimos cadastros</h2>
+            </div>
+            @if (User.IsInRole("Administrador"))
+            {
+                <a href="/Tecnologias/Criar" class="btn btn-nasa btn-sm">Cadastrar spinoff</a>
+            }
+        </header>
+        <div class="sc-table-wrap">
+            <table class="table sc-table table-hover align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th scope="col">Tecnologia</th>
+                        <th scope="col">Setor</th>
+                        <th scope="col">Missão</th>
+                        <th scope="col">Ano</th>
+                        <th scope="col">Cadastro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var t in Model.Recentes)
+                    {
+                        <tr>
+                            <td><a href="/Tecnologias/Detalhes/@t.Id">@t.Nome</a></td>
+                            <td><span class="sc-cat-pill" style="color: @(t.CategoriaCorHex ?? "#e8b923")">@t.CategoriaNome</span></td>
+                            <td>@(t.MissaoNome ?? "—")</td>
+                            <td>@(t.AnoOrigem?.ToString() ?? "—")</td>
+                            <td>@t.CriadoEm.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>

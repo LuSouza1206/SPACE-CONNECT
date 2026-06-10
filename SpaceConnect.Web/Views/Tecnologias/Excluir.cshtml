@@ -1,0 +1,57 @@
+@model TecnologiaViewModel
+@{
+    ViewData["Title"] = "Excluir Tecnologia";
+}
+
+<div class="sc-confirm-card">
+    <div class="sc-confirm-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="3 6 5 6 21 6"/>
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+            <path d="M10 11v6m4-6v6"/>
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/>
+        </svg>
+    </div>
+
+    <div class="sc-confirm-title">Remover tecnologia?</div>
+    <div class="sc-confirm-desc">
+        Você está prestes a remover permanentemente <strong style="color:var(--text)">@Model.Nome</strong> do catálogo.
+        Esta ação não pode ser desfeita.
+    </div>
+
+    <div class="sc-panel" style="text-align:left;margin-bottom:1.5rem">
+        <div class="sc-panel-body" style="padding:1rem 1.25rem">
+            <div style="display:flex;align-items:center;gap:0.75rem">
+                @if (Model.CategoriaNome != null)
+                {
+                    <span class="sc-badge" style="background:@(Model.CategoriaCorHex ?? "#3b82f6")22;color:@(Model.CategoriaCorHex ?? "#3b82f6")">
+                        <span class="sc-badge-dot" style="background:@(Model.CategoriaCorHex ?? "#3b82f6")"></span>
+                        @Model.CategoriaNome
+                    </span>
+                }
+                @if (Model.AnoOrigem.HasValue)
+                {
+                    <span class="sc-tech-year">@Model.AnoOrigem</span>
+                }
+            </div>
+            <div style="font-weight:600;color:var(--text);margin-top:0.5rem">@Model.Nome</div>
+            <div style="font-size:0.82rem;color:var(--text-muted);margin-top:0.25rem;line-height:1.5">
+                @(Model.Descricao.Length > 120 ? Model.Descricao.Substring(0, 120) + "..." : Model.Descricao)
+            </div>
+        </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;justify-content:center">
+        <form asp-action="Excluir" asp-route-id="@Model.Id" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="sc-btn sc-btn-red">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"/>
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                </svg>
+                Sim, excluir
+            </button>
+        </form>
+        <a href="/Tecnologias" class="sc-btn sc-btn-ghost">Cancelar</a>
+    </div>
+</div>

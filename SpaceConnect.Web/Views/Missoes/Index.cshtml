@@ -1,0 +1,47 @@
+@model List<MissaoViewModel>
+@{
+    ViewData["Title"] = "Missões";
+}
+
+<div class="sc-section-head mb-4 reveal">
+    <span class="sc-kicker">Linha do tempo</span>
+    <h2 class="mb-1">Missões de origem</h2>
+    <p class="text-muted mb-0">Programas espaciais que geraram spinoffs catalogados neste arquivo.</p>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="sc-empty-state">
+        <p class="mb-0">Nenhuma missão cadastrada.</p>
+    </div>
+}
+else
+{
+    <div class="sc-timeline">
+        @foreach (var m in Model.OrderBy(x => x.Ano))
+        {
+            <article class="sc-timeline-item reveal-left" data-year="@m.Ano">
+                <div class="d-flex flex-wrap justify-content-between align-items-start gap-2 mb-2">
+                    <div>
+                        <span class="sc-kicker">@m.Agencia</span>
+                        <h3 class="h5 mb-1 mt-1">@m.Nome</h3>
+                    </div>
+                    <span class="sc-year-badge">@m.Ano</span>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(m.Descricao))
+                {
+                    <p class="sc-prose mb-3">@m.Descricao</p>
+                }
+                <div class="d-flex flex-wrap align-items-center gap-3">
+                    <span class="small text-muted">
+                        @(m.TotalTecnologias == 1 ? "1 spinoff ligado" : $"{m.TotalTecnologias} spinoffs ligados")
+                    </span>
+                    @if (m.TotalTecnologias > 0)
+                    {
+                        <a href="/Tecnologias?missaoId=@m.Id" class="sc-read-more">Ver spinoffs →</a>
+                    }
+                </div>
+            </article>
+        }
+    </div>
+}

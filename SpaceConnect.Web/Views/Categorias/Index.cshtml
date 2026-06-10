@@ -1,0 +1,41 @@
+@model List<CategoriaViewModel>
+@{
+    ViewData["Title"] = "Setores";
+}
+
+<div class="sc-section-head mb-4 reveal">
+    <span class="sc-kicker">Mapa de impacto</span>
+    <h2 class="mb-1">Setores beneficiados</h2>
+    <p class="text-muted mb-0">Áreas da economia terrestre impactadas por tecnologias espaciais.</p>
+</div>
+
+@if (!Model.Any())
+{
+    <div class="sc-empty-state">
+        <p class="mb-0">Nenhum setor cadastrado.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4">
+        @foreach (var cat in Model.OrderByDescending(c => c.TotalTecnologias))
+        {
+            <div class="col-md-6 col-xl-4 reveal">
+                <a href="/Tecnologias?categoriaId=@cat.Id" class="sc-feature-card sc-img-hover h-100">
+                    <div class="sc-feature-img" style="height: 200px;">
+                        <img src="@NasaUi.CategoryImage(cat.Nome)" alt="@cat.Nome" loading="lazy" />
+                        <span class="sc-kicker">@cat.TotalTecnologias spinoff@(cat.TotalTecnologias != 1 ? "s" : "")</span>
+                    </div>
+                    <div class="sc-feature-body">
+                        <h3>@cat.Nome</h3>
+                        @if (!string.IsNullOrWhiteSpace(cat.Descricao))
+                        {
+                            <p>@cat.Descricao</p>
+                        }
+                        <span class="sc-read-more mt-auto">Explorar setor →</span>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}

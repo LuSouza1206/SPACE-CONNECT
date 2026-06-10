@@ -1,0 +1,92 @@
+@model List<TecnologiaViewModel>
+@{
+    ViewData["Title"] = "Spinoffs";
+    var missaoId = ViewBag.MissaoId as int?;
+    var categoriaId = ViewBag.CategoriaId as int?;
+    var filtroAtivo = missaoId.HasValue || categoriaId.HasValue;
+}
+
+<div class="sc-section-head d-flex flex-wrap justify-content-between align-items-end gap-3 mb-4 reveal">
+    <div>
+        <p class="sc-kicker mb-1">Arquivo</p>
+        <h2 class="mb-0">Spinoffs</h2>
+        <p class="mt-2 mb-0 text-muted">@Model.Count tecnologia@(Model.Count != 1 ? "s" : "") · do espaço para o planeta.</p>
+    </div>
+    <div class="sc-page-actions">
+        <input type="search" id="busca-spinoffs" class="form-control sc-search-bar" placeholder="Buscar spinoff…" aria-label="Buscar" />
+        @if (User.IsInRole("Administrador"))
+        {
+            <a href="/Tecnologias/Criar" class="btn btn-nasa-red">Cadastrar</a>
+        }
+    </div>
+</div>
+
+@if (filtroAtivo)
+{
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+        <span class="small text-muted">Filtrando por</span>
+        @if (categoriaId.HasValue && ViewBag.CategoriaNome != null)
+        {
+            <span class="sc-filter-pill">Setor: @ViewBag.CategoriaNome</span>
+        }
+        @if (missaoId.HasValue && ViewBag.MissaoNome != null)
+        {
+            <span class="sc-filter-pill">Missão: @ViewBag.MissaoNome</span>
+        }
+        <a href="/Tecnologias" class="small fw-semibold">Limpar</a>
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <div class="sc-empty-state">
+        <p class="mb-0">Nenhum spinoff cadastrado ainda.</p>
+    </div>
+}
+else
+{
+    <div class="row g-4" id="grid-spinoffs">
+        @foreach (var tech in Model)
+        {
+            <div class="col-md-6 col-xl-4 spinoff-item reveal" data-nome="@tech.Nome.ToLower()" data-cat="@(tech.CategoriaNome?.ToLower() ?? "")">
+                <a href="/Tecnologias/Detalhes/@tech.Id" class="sc-feature-card sc-img-hover">
+                    <div class="sc-feature-img">
+                        <img src="@NasaUi.SpinoffImage(tech.Id, tech.CategoriaNome)" alt="@tech.Nome" loading="lazy" />
+                        @if (tech.CategoriaNome != null)
+                        {
+                            <span class="sc-kicker">@tech.CategoriaNome</span>
+                        }
+                    </div>
+                    <div class="sc-feature-body">
+                        <div class="d-flex justify-content-between align-items-start gap-2 mb-2">
+                            <h3>@tech.Nome</h3>
+                            @if (tech.AnoOrigem.HasValue)
+                            {
+                                <span class="sc-year-badge">@tech.AnoOrigem</span>
+                            }
+                        </div>
+                        <p>@(tech.Descricao.Length > 140 ? tech.Descricao[..140] + "…" : tech.Descricao)</p>
+                        @if (tech.MissaoNome != null)
+                        {
+                            <small class="text-muted d-block mb-2">Missão: @tech.MissaoNome</small>
+                        }
+                        <span class="sc-read-more mt-2">Ver spinoff</span>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}
+
+@section Scripts {
+<script>
+document.getElementById('busca-spinoffs')?.addEventListener('input', function(e) {
+    var q = e.target.value.toLowerCase();
+    document.querySelectorAll('.spinoff-item').forEach(function(el) {
+        var nome = el.dataset.nome || '';
+        var cat = el.dataset.cat || '';
+        el.style.display = (!q || nome.includes(q) || cat.includes(q)) ? '' : 'none';
+    });
+});
+</script>
+}
