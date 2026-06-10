@@ -2,7 +2,20 @@
 
 Sistema web para catalogar e visualizar tecnologias derivadas da exploração espacial.
 
-Desenvolvido como Global Solution — FIAP 2025 | Engenharia de Software | C# Development
+Desenvolvido como Global Solution — FIAP 2025 | Engenharia de Software | C# Development | Turma **3ESPR**
+
+**Repositório:** https://github.com/LuSouza1206/SPACE-CONNECT
+
+---
+
+## Equipe
+
+| RM | Integrante | Turma |
+|----|------------|-------|
+| 553282 | Kaio | 3ESPR |
+| 553956 | Lucas Souza | 3ESPR |
+| 554323 | Guilherme | 3ESPR |
+| 553172 | João Pedro | 3ESPR |
 
 ---
 
@@ -152,4 +165,4 @@ Se der erro no passo 3, pule para o 4 (só o Import Reverse Engineer SQL já cos
 
 ### Git (repositório)
 
-O repositório local já pode ser inicializado na pasta `SpaceConnect/`. Peça ao colega de equipe ou use o Cursor para criar os commits semânticos listados acima antes de subir no GitHub/GitLab da FIAP.
+Código versionado em: **https://github.com/LuSouza1206/SPACE-CONNECT**
