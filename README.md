@@ -12,10 +12,10 @@ Desenvolvido como Global Solution — FIAP 2025 | Engenharia de Software | C# De
 
 | RM | Integrante | Turma |
 |----|------------|-------|
-| 553282 | Kaio | 3ESPR |
-| 553956 | Lucas Souza | 3ESPR |
-| 554323 | Guilherme | 3ESPR |
-| 553172 | João Pedro | 3ESPR |
+| 553282 | Kaio Vinicius Meireles Alves | 3ESPR |
+| 553956 | Lucas Alves de Souza | 3ESPR |
+| 554323 | Guilherme Fernandes de Freitas | 3ESPR |
+| 553172 | João Pedro Chizzolini de Freitas | 3ESPR |
 
 ---
 
