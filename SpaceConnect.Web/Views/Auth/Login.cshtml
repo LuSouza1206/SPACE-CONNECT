@@ -1,0 +1,78 @@
+@model LoginViewModel
+@{
+    Layout = null;
+    ViewData["Title"] = "Entrar";
+}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#030712" />
+    <title>Entrar | SpaceConnect</title>
+    <link rel="icon" href="~/favicon.svg" type="image/svg+xml" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/spaceconnect.css" asp-append-version="true" />
+</head>
+<body class="sc-page-enter">
+<div class="cosmos-bg" aria-hidden="true">
+    <div class="cosmos-orb cosmos-orb-1"></div>
+    <div class="cosmos-orb cosmos-orb-2"></div>
+</div>
+<div class="sc-auth-wrap">
+    <div class="sc-auth-hero" style="@NasaUi.HeroStyle(NasaUi.AuthHeroImage)">
+        <blockquote>
+            Restrição extrema gera as melhores soluções. O espaço é o laboratório definitivo.
+            <cite>SpaceConnect · FIAP 3ESPR</cite>
+        </blockquote>
+    </div>
+    <div class="sc-auth-panel">
+        <div class="d-flex align-items-center gap-2 mb-4">
+            <span class="sc-logo-mark"></span>
+            <div>
+                <strong class="fs-5" style="color:var(--text)">SpaceConnect</strong>
+                <div class="small text-muted">Spinoff archive</div>
+            </div>
+        </div>
+
+        <h1 class="h3 fw-bold mb-1">Entrar</h1>
+        <p class="text-muted mb-4">Acesso ao arquivo de tecnologias espaciais.</p>
+
+        @if (TempData["Sucesso"] != null)
+        {
+            <div class="alert alert-success">@TempData["Sucesso"]</div>
+        }
+
+        <div class="sc-demo-box mb-4">
+            <strong>Contas demo</strong><br />
+            Admin: <code>admin@spaceconnect.fiap</code> / <code>Admin@2025</code><br />
+            Pesquisador: <code>pesquisador@spaceconnect.fiap</code> / <code>Pesq@2025</code>
+        </div>
+
+        <form asp-action="Login" method="post">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="returnUrl" value="@ViewBag.ReturnUrl" />
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+            <div class="mb-3">
+                <label asp-for="Email" class="form-label"></label>
+                <input asp-for="Email" class="form-control" type="email" autocomplete="email" />
+                <span asp-validation-for="Email" class="text-danger small"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="Senha" class="form-label"></label>
+                <input asp-for="Senha" class="form-control" type="password" autocomplete="current-password" />
+                <span asp-validation-for="Senha" class="text-danger small"></span>
+            </div>
+            <button type="submit" class="btn btn-nasa w-100">Entrar</button>
+        </form>
+
+        <p class="text-center text-muted small mt-4 mb-0">
+            Pesquisador? <a href="/Auth/Cadastro">Criar conta</a>
+        </p>
+    </div>
+</div>
+<partial name="_ValidationScriptsPartial" />
+<script src="~/js/spaceconnect.js" asp-append-version="true"></script>
+</body>
+</html>
