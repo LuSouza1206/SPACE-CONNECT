@@ -1,0 +1,27 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.swp
+*~
+
+## IDE
+.idea/
+.vscode/
+
+## OS
+Thumbs.db
+.DS_Store
+
+## Secrets
+appsettings.Development.local.json
+*.env
+
+## Build / logs
+*.log
+TestResults/
+
+## Video backups
+**/wwwroot/video/*.bak
